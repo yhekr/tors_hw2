@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  node1:
+    build: .
+    command: ["python", "main.py", "--id=1", "--port=8000", "--raft-port=5051", "node2:5052", "node3:5053"]
+    ports:
+      - "8000:8000"
+      - "5051:5051"
+
+  node2:
+    build: .
+    command: ["python", "main.py", "--id=2", "--port=8001", "--raft-port=5052", "node1:5051", "node3:5053"]
+    ports:
+      - "8001:8001"
+      - "5052:5052"
+
+  node3:
+    build: .
+    command: ["python", "main.py", "--id=3", "--port=8002", "--raft-port=5053", "node1:5051", "node2:5052"]
+    ports:
+      - "8002:8002"
+      - "5053:5053"
