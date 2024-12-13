@@ -1,23 +1,54 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  node1:
-    build: .
-    command: ["python", "main.py", "--id=1", "--port=8000", "--raft-port=5051", "node2:5052", "node3:5053"]
+  raft-1:
+    environment:
+      INDEX: 1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raft-1
     ports:
-      - "8000:8000"
-      - "5051:5051"
+      - "5001:5001"
+    networks:
+      - app_network
 
-  node2:
-    build: .
-    command: ["python", "main.py", "--id=2", "--port=8001", "--raft-port=5052", "node1:5051", "node3:5053"]
+  raft-2:
+    environment:
+      INDEX: 2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raft-2
     ports:
-      - "8001:8001"
-      - "5052:5052"
+      - "5002:5002"
+    networks:
+      - app_network
 
-  node3:
-    build: .
-    command: ["python", "main.py", "--id=3", "--port=8002", "--raft-port=5053", "node1:5051", "node2:5052"]
+  raft-3:
+    environment:
+      INDEX: 3
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raft-3
     ports:
-      - "8002:8002"
-      - "5053:5053"
+      - "5003:5003"
+    networks:
+      - app_network
+
+  raft-4:
+    environment:
+      INDEX: 4
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raft-4
+    ports:
+      - "5004:5004"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
